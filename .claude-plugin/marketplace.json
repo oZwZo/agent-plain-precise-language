@@ -1,0 +1,15 @@
+{
+  "name": "wz369-writing",
+  "description": "Writing rules that make Claude readable for a non-native English scientific reader without making any claim vaguer.",
+  "owner": {
+    "name": "wz369",
+    "email": "wz369@cam.ac.uk"
+  },
+  "plugins": [
+    {
+      "name": "plain-precise",
+      "source": "./plugins/plain-precise",
+      "description": "Always-on output style: plain English for a Chinese-first-language CEFR-B2 reader, with every technical term kept exact."
+    }
+  ]
+}

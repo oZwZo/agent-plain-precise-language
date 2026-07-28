@@ -1,0 +1,19 @@
+{
+  "name": "plain-precise",
+  "displayName": "Plain-precise writing",
+  "version": "1.0.0",
+  "description": "Always-on output style: plain English for a Chinese-first-language CEFR-B2 reader, with every technical term kept exact. Precision outranks readability.",
+  "author": {
+    "name": "wz369",
+    "email": "wz369@cam.ac.uk"
+  },
+  "license": "MIT",
+  "keywords": [
+    "writing",
+    "plain-language",
+    "output-style",
+    "non-native-english",
+    "scientific-writing"
+  ],
+  "outputStyles": "./output-styles/"
+}

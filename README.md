@@ -45,46 +45,6 @@ With the rule:
 > Reported standard errors are too small by a factor of 1.83. A reported value
 > of 0.010 should be 0.018.
 
-### Where the rule loses
-
-An honest example, from the same pair of answers. Both give the same result.
-
-Without the rule:
-
-> **Headline: divide any nominal-N sample size by 0.3. You need about 3.33 times
-> as many particles as the naive calculation says.**
-
-With the rule:
-
-> ## The answer
->
-> Multiply every particle count that came out of the calculation by about 3.3. A
-> nominal count of 10,000 particles carries the precision of 3,000 independent
-> particles, so you need about 33,000 nominal particles to reach the precision
-> that the calculation asked for.
-
-The version without the rule is better here, and the reader this style was built
-for said so before any of this was measured. It says the same thing in 19 words
-against 37.
-
-**The style changed because of this example.** The first diagnosis was that the
-passage broke the style's 25-word sentence target, and that the fix was to make
-that target win more often. The reader rejected the target itself, but not the
-preference behind it. Short sentences stay the default. What went is the cap on
-each individual sentence, because a sentence that needs more than 25 words to be
-clear at first glance should be written long.
-
-So the fault in this passage is repetition rather than length. It says
-"calculation" three times in 37 words and states the precision twice.
-
-`verify/score.py` follows the same split. Mean sentence length stays a hard
-gate, since short sentences are still the default. The share of sentences over
-25 words became advisory, since that was the cap that was rejected.
-
-Both versions do mark where the answer is. The one without the rule uses a bold
-line, and the one under the rule uses a heading, which the style allows. So this
-is not an argument against the ban on inline bold.
-
 ## Install
 
 Four steps. Do all four, because the first two on their own leave the rule
@@ -594,7 +554,8 @@ The reader read a real example and rejected the 25-word cap on each sentence,
 because a sentence that needs more words to be clear at first glance should be
 written long. Short sentences stay the default, so mean sentence length is still
 a hard gate. Every number above was measured before that decision and is
-unchanged by it. See [Where the rule loses](#where-the-rule-loses).
+unchanged by it. The example that caused the change, and the numbers behind it,
+are in [`verify/RESULTS.md`](verify/RESULTS.md).
 
 **Three rules barely work**, and this is recorded as a negative result rather
 than hidden: reduced relative clauses fell only 11%, stacked verb forms 9%, and

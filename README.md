@@ -238,4 +238,13 @@ grader, not a pattern.
 
 ## Licence
 
-MIT.
+Apache License 2.0. See [`LICENSE`](LICENSE) and [`NOTICE`](NOTICE).
+
+Anyone may use, change and redistribute this, including inside a commercial
+product. Two conditions apply to redistribution. They must keep the copyright
+notice and the `NOTICE` file, and they must state which files they changed.
+The licence also grants patent rights and withdraws them from anyone who sues
+over a patent covering this work.
+
+If you publish something built on this rule, a citation is welcome but not
+required.

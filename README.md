@@ -1,8 +1,8 @@
 # plain-precise
 
 An always-on writing rule for Claude Code. It makes Claude write plain English
-for a reader whose first language is Chinese and whose general English is around
-CEFR B2, while keeping every technical term exact.
+for a non-native English speaker whose general English is around CEFR B2, while
+keeping every technical term exact.
 
 The governing rule inside it is one sentence: **never trade precision for
 readability.** If plain phrasing would make a claim vaguer, the style keeps the
@@ -182,8 +182,9 @@ The style is written in the first person for one specific reader, which is what
 makes it work. Four things in it are person-specific, and a colleague who wants
 to reuse it should change these four and leave the rest alone.
 
-1. **The first-language line**, near the top: "My first language is Chinese and
-   I work in computational biology." The whole Compounds section and the whole
+1. **The first-language line**, quoted here from near the top of the style file:
+   "My first language is Chinese and I work in computational biology." The whole
+   Compounds section and the whole
    Relative clauses section follow from Chinese specifically, because Chinese
    compounds are often coordinate where English compounds are right-headed, and
    because Chinese has no relative pronoun. For a Romance-language reader those

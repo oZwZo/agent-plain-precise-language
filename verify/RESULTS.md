@@ -297,7 +297,18 @@ I proposed making the 25-word target win over "do not compress". The reader reje
 > I don't think the 25 word target is the compulsory. If the longer sentence is easier to
 > understand, I don't mind.
 
-So the diagnosis was wrong even though the preference was right. The fault in that passage is
+**My first attempt at this change overshot, and the reader corrected it again:**
+
+> I prefer short sentences overall. What i don't agree is the 25 word target. So no need to force
+> every sentence to be restricted in 25 word. If sometimes you need more than 25 words to make the
+> sentence clear in the first glance, that is allowed.
+
+So the preference for short sentences never changed. Only the cap on each individual sentence did.
+I had rewritten the rule as "sentence length is a check, not a limit", which reads as neutral about
+length, and I had also advised dropping "prefer short sentences" from an older instruction file.
+Both were wrong. The rule now states the preference first and the exception second.
+
+The fault in that passage is
 repetition, not length. It says "calculation" three times in 37 words and states the precision
 twice. Cutting only the repetition gives a version that says the same thing in 26 words, on the
 same count that gives 37 for the original and 19 for the version without the rule. Splitting the
@@ -305,18 +316,26 @@ long sentence into short ones would not have helped.
 
 Three things changed as a result.
 
-1. **The style.** The Sentences section now opens with "Sentence length is a check, not a limit",
-   and says to cut repetition before touching length. The 40-word figure is now the only place
-   where length alone decides, because that is where the comprehension evidence is strongest.
-2. **The pre-send checklist.** Item 1 was "Split every one over 25 words". It now says to look for
-   a repeated noun phrase first, and not to split a sentence only to get under 25 words. The list
-   of the three most common failures now opens with repetition inside a sentence rather than with
-   long sentences.
-3. **The scorer.** `pct_over_25w` and both `mean_sentence_len` bounds moved from `GATES` to a new
-   `ADVISORY` list. They are still measured and printed, under a heading reading "advisory, not
-   counted". `longest_sentence <= 40` stays a hard gate. The gate count therefore falls from 16 to
-   13, so pass counts recorded above this line are not directly comparable with ones recorded
-   below it. No underlying measurement changed.
+1. **The style.** The Sentences section now opens with "Prefer short sentences. Treat 25 words as
+   a guide rather than as a cap." The exception is stated next: a sentence that needs more than 25
+   words to be clear at first glance should be written long. It also says to cut repetition before
+   touching length. The 40-word figure stays, because that is where the comprehension evidence is
+   strongest.
+2. **The pre-send checklist.** Item 1 was "Split every one over 25 words". It now says to cut a
+   repeated noun phrase first, then to split only when the sentence is not clear at first glance,
+   and it closes by repeating that sentences should still be short on average. The list of the
+   three most common failures now opens with repetition inside a sentence rather than with long
+   sentences.
+3. **The scorer.** `pct_over_25w` moved from `GATES` to a new `ADVISORY` list, printed under a
+   heading reading "advisory, not counted", because that metric measures the rejected per-sentence
+   cap. Both `mean_sentence_len` bounds stay hard gates, because the preference for short
+   sentences did not change. `longest_sentence <= 40` stays a hard gate. The gate count therefore
+   falls from 16 to 15, so pass counts recorded above this line are not directly comparable with
+   ones recorded below it. No underlying measurement changed.
+
+On the disputed passage the corrected instrument gives the right verdict. It fails on mean
+sentence length, at 21.0 words against a gate of 16.0, and its 50 percent of sentences over 25
+words is reported as advisory rather than as a failure.
 
 This is the first time the reader has overruled a rule, and it went against the rule I would have
 defended. Recording it here because the alternative is a style that scores well against its own

@@ -69,13 +69,17 @@ against 37.
 
 **The style changed because of this example.** The first diagnosis was that the
 passage broke the style's 25-word sentence target, and that the fix was to make
-that target win more often. The reader rejected that reading: a long sentence
-that is easy to follow is fine. So the real fault is repetition, not length. The
-passage says "calculation" three times in 37 words and states the precision
-twice. Sentence length is now written as a check rather than as a limit, and
-40 words is the only point where length alone decides. `verify/score.py` follows
-the same change, so the two sentence-length metrics are still measured and
-printed but no longer decide pass or fail.
+that target win more often. The reader rejected the target itself, but not the
+preference behind it. Short sentences stay the default. What went is the cap on
+each individual sentence, because a sentence that needs more than 25 words to be
+clear at first glance should be written long.
+
+So the fault in this passage is repetition rather than length. It says
+"calculation" three times in 37 words and states the precision twice.
+
+`verify/score.py` follows the same split. Mean sentence length stays a hard
+gate, since short sentences are still the default. The share of sentences over
+25 words became advisory, since that was the cap that was rejected.
 
 Both versions do mark where the answer is. The one without the rule uses a bold
 line, and the one under the rule uses a heading, which the style allows. So this
@@ -585,12 +589,12 @@ calls across 12 prompts and 2 arms with 0 failures:
 
 No metric got worse.
 
-The last two rows are now advisory rather than requirements. The reader read a
-real example and decided that a long sentence which is easy to follow is fine,
-so the style treats sentence length as a check rather than a limit. The scorer
-still measures and prints both, and no longer counts them towards pass or fail.
-Every number above was measured before that decision and is unchanged by it. See
-[Where the rule loses](#where-the-rule-loses).
+The "sentences over 25 words" row is now advisory rather than a requirement.
+The reader read a real example and rejected the 25-word cap on each sentence,
+because a sentence that needs more words to be clear at first glance should be
+written long. Short sentences stay the default, so mean sentence length is still
+a hard gate. Every number above was measured before that decision and is
+unchanged by it. See [Where the rule loses](#where-the-rule-loses).
 
 **Three rules barely work**, and this is recorded as a negative result rather
 than hidden: reduced relative clauses fell only 11%, stacked verb forms 9%, and

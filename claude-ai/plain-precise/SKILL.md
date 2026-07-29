@@ -34,10 +34,14 @@ a measurement, give the measurement. Do not use a figurative phrasal verb where 
 exists: write determine not pin down, hiding not papering over, added afterwards not bolted on.
 Write a compound technical term in full every time, so "nuisance parameter", never "the nuisance".
 
-**Sentences.** Sentence length is a check, not a limit. A sentence over 25 words is a signal to
-look at it again, not a rule that you broke. Split it when splitting loses nothing, and keep it
-long when splitting would make it harder to follow. A long sentence that I can follow is better
-than two short ones that I have to reassemble. What actually costs me is a sentence carrying two
+**Sentences.** Prefer short sentences, and treat 25 words as a guide rather than as a cap. Most
+sentences should sit well under 25 words, because short sentences are what I read most easily.
+The exception is clarity at first glance: if a sentence needs more than 25 words to be clear the
+first time I read it, write the longer sentence. Do not split a sentence only to get under the
+number, and do not split one when the two halves would have to be reassembled before they make
+sense. A long sentence that I can follow is better than two short ones that I have to put back
+together. Aim for about 15 words per sentence on average, and get there by writing simply rather
+than by chopping. What actually costs me is a sentence carrying two
 claims, or a sentence that repeats itself, so cut the repetition before you touch the length. Do
 not name the same thing three times in one paragraph. Above about 40 words I lose the thread, and
 that is the one place where length alone decides. Good places to split, when a sentence really

@@ -346,23 +346,26 @@ GATES = [
     ("coined_compound_per1k", "<=", 2.0, "single-use coined compound"),
     # noun_stack_per1k is deliberately NOT a gate. See the comment on NOUN_STACK_HYPHEN.
     ("longest_sentence", "<=", 40, "longest sentence (words)"),
+    # The mean stays a hard gate, because the reader still prefers short
+    # sentences overall. What they rejected was the per-sentence cap, not the
+    # preference. The lower bound stops a run from passing by chopping
+    # everything into fragments.
+    ("mean_sentence_len", "<=", 16.0, "mean sentence length"),
+    ("mean_sentence_len", ">=", 8.0, "mean sentence length (lower bound)"),
 ]
 
-# Advisory metrics. Measured and printed, but they do not decide pass or fail.
+# Advisory. Measured and printed, but it does not decide pass or fail.
 #
-# The reader decided this after reading a real example: a long sentence that is
-# easy to follow is fine, and the 25-word figure is a place to look again rather
-# than a limit. The style was changed to match, so the instrument follows. Only
-# the 40-word cliff stays a hard gate, because the style still says that above
-# 40 words length alone decides.
+# The reader rejected the 25-word figure as a cap on individual sentences: a
+# sentence may run past 25 words when the longer sentence is clear at first
+# glance. They did not reject short sentences, so the mean above stays a gate
+# and only this per-sentence count moves here.
 #
-# Results recorded before this change counted 16 gates. They now count 13, so
+# Results recorded before this change counted 16 gates. They now count 15, so
 # the two sets of pass counts are not directly comparable. Every underlying
 # number is unchanged.
 ADVISORY = [
     ("pct_over_25w", "<=", 5.0, "sentences over 25 words (%)"),
-    ("mean_sentence_len", "<=", 16.0, "mean sentence length"),
-    ("mean_sentence_len", ">=", 8.0, "mean sentence length (lower bound)"),
 ]
 
 

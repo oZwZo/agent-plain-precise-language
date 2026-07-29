@@ -253,6 +253,43 @@ in this project that came from my own scorer rather than from the model.
 After the fix the baseline still reproduces: mean sentence length 16.17 words, against 16.2 in the
 original measurement.
 
+## The reader preferred the control arm on one passage, and was right
+
+This is the first judgment from the reader the style was built for, and it went against the style.
+Shown two versions of the same answer, they said the one written without the rule read better.
+
+Without the rule, 19 words:
+
+> **Headline: divide any nominal-N sample size by 0.3. You need about 3.33 times as many particles
+> as the naive calculation says.**
+
+With the rule, 37 words, under a heading reading "The answer":
+
+> Multiply every particle count that came out of the calculation by about 3.3. A nominal count of
+> 10,000 particles carries the precision of 3,000 independent particles, so you need about 33,000
+> nominal particles to reach the precision that the calculation asked for.
+
+| metric | without the rule | with the rule | the style's target |
+|---|---|---|---|
+| words | 19 | 37 | none |
+| mean sentence length | 10.5 | 21.0 | about 15 |
+| longest sentence | 13 | 29 | under 25 |
+| sentences over 25 words | 0% | 50% | at most 5% |
+
+**The rule arm fails the rule's own sentence-length gate on this passage.** Trial 1 measured mean
+sentence length across whole answers and found 15.79 words, which passes. So this is a local
+failure that an average over a whole answer hides.
+
+**The mechanism is two rules pulling against each other.** "Length follows from clarity, so do not
+compress" and "keep almost every sentence under 25 words" both apply, and the first one won. The
+style states no priority between them. It states a priority only between precision and
+readability.
+
+**One correction to my own first reading of this.** I initially wrote that the ban on inline bold
+had removed the only visual mark showing where the answer was. That was wrong, and it came from an
+excerpt I built badly. The rule arm did mark the answer, with a heading reading "The answer", which
+the style permits. The length finding stands; the formatting finding does not.
+
 ## Not done
 
 - 30 of the 42 eligible pre-session answers were not used in the fidelity trial. That is a cost

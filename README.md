@@ -33,28 +33,51 @@ With the rule:
 
 > Two assumptions that the factor of 3.3 depends on
 
-### Structure
+### Metaphor, and numbers with a baseline
 
 Without the rule:
 
-> **Headline: divide any nominal-N sample size by 0.3. You need about 3.33 times
-> as many particles as the naive calculation says.**
->
 > Any convergence check of the form "standard error below tolerance at N
 > particles" fires 3.33 times too early.
 
 With the rule:
 
+> Reported standard errors are too small by a factor of 1.83. A reported value
+> of 0.010 should be 0.018.
+
+### Where the rule loses
+
+An honest example, from the same pair of answers. Both give the same result.
+
+Without the rule:
+
+> **Headline: divide any nominal-N sample size by 0.3. You need about 3.33 times
+> as many particles as the naive calculation says.**
+
+With the rule:
+
+> ## The answer
+>
 > Multiply every particle count that came out of the calculation by about 3.3. A
 > nominal count of 10,000 particles carries the precision of 3,000 independent
 > particles, so you need about 33,000 nominal particles to reach the precision
 > that the calculation asked for.
->
-> Reported standard errors are too small by a factor of 1.83. A reported value
-> of 0.010 should be 0.018.
 
-The two quoted lines in each block are not next to each other in the original
-answers.
+The version without the rule is better here, and the reader this style was built
+for said so before any of this was measured. The numbers agree: 19 words against
+37, a mean sentence length of 10.5 words against 21.0, a longest sentence of 13
+words against 29, and no sentence over 25 words against half of them. The style
+asks for about 15 words per sentence and for almost every sentence to stay under
+25, so the passage written under the style fails the style's own target.
+
+Two of the style's own rules pull against each other here. "Length follows from
+clarity, so do not compress" won, and "keep almost every sentence under 25
+words" lost. It is also wordy in a way no rule catches, since it says
+"calculation" three times in 37 words.
+
+Both versions do mark where the answer is. The one without the rule uses a bold
+line, and the one under the rule uses a heading, which the style allows. So this
+is not an argument against the ban on inline bold.
 
 ## Install
 

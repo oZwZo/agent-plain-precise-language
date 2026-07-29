@@ -11,7 +11,7 @@ precise phrasing and spends an extra sentence explaining it.
 ## Install, the short version
 
 ```bash
-claude plugin marketplace add <your-github-user>/claude-plain-precise
+claude plugin marketplace add oZwZo/agent-plain-precise-language
 claude plugin install plain-precise@wz369-writing
 ```
 
@@ -61,7 +61,7 @@ the plugin into something installable with two commands on any machine.
 ## What is in this repository
 
 ```
-claude-plain-precise/
+agent-plain-precise-language/
 ├── .claude-plugin/
 │   └── marketplace.json          the catalogue, so /plugin can find the plugin
 ├── plugins/
@@ -85,17 +85,21 @@ Everything except `plain-precise.md` is packaging. If you only want the rule,
 copy that one file into `~/.claude/output-styles/` and set
 `"outputStyle": "plain-precise"` in `~/.claude/settings.json`.
 
-## Publish it so other machines can install it
+## Publish a change so other machines pick it up
 
-The marketplace is a git repository. Push this directory to any git host.
+The marketplace is this git repository. To release a change, edit the files,
+bump `version` in `plugins/plain-precise/.claude-plugin/plugin.json`, then
+commit and push.
 
 ```bash
-cd claude-plain-precise
-git init
 git add -A
-git commit -m "plain-precise output style, v1.0.0"
-gh repo create claude-plain-precise --private --source=. --push
+git commit -m "what changed"
+git push
 ```
+
+Users only receive an update when the `version` field changes, so bump it on
+every release. On their side, `claude plugin marketplace update` refreshes the
+local copy.
 
 Private repositories work. Claude Code uses your existing git credential helpers
 for plugin installs, so `gh auth login` or an SSH key already in `ssh-agent` is
@@ -108,12 +112,9 @@ re-cloning.
 Then on any new machine:
 
 ```bash
-claude plugin marketplace add <your-github-user>/claude-plain-precise
+claude plugin marketplace add oZwZo/agent-plain-precise-language
 claude plugin install plain-precise@wz369-writing
 ```
-
-Bump `version` in `plugins/plain-precise/.claude-plugin/plugin.json` on every
-release. Users only receive an update when that field changes.
 
 ## Install without the plugin system
 

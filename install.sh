@@ -2,7 +2,7 @@
 # Fallback installer for machines where the plugin route is not available.
 #
 # The plugin route is the recommended one and needs no script:
-#     claude plugin marketplace add <owner>/claude-plain-precise
+#     claude plugin marketplace add oZwZo/agent-plain-precise-language
 #     claude plugin install plain-precise@wz369-writing
 #
 # Use this script instead when the machine has no network access to the git

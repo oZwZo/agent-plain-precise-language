@@ -8,16 +8,45 @@ The governing rule inside it is one sentence: **never trade precision for
 readability.** If plain phrasing would make a claim vaguer, the style keeps the
 precise phrasing and spends an extra sentence explaining it.
 
-## Install, the short version
+## Install
+
+Four steps. Do all four, because the first two on their own leave the rule
+half-installed.
+
+**Step 1. Register the catalogue.**
 
 ```bash
 claude plugin marketplace add oZwZo/agent-plain-precise-language
+```
+
+This prints `Successfully added marketplace`, and that message is easy to
+misread. It installs nothing. It only tells Claude Code where to look.
+
+**Step 2. Install the plugin.**
+
+```bash
 claude plugin install plain-precise@wz369-writing
 ```
 
-Then run `/clear` or start a new session. That is the whole installation. You do
-not edit `settings.json`, because the style sets `force-for-plugin: true`, which
-applies it automatically whenever the plugin is enabled.
+Then run `/clear` or start a new session, because the style is part of the
+system prompt and Claude Code reads that once at session start. You do not edit
+`settings.json`, because the style sets `force-for-plugin: true`, which applies
+it automatically whenever the plugin is enabled.
+
+**Step 3. Add the research-integrity rules by hand.**
+
+A plugin cannot ship a `CLAUDE.md`, so this part does not travel with the
+plugin. Copy the fenced block from [`claude-md-snippet.md`](claude-md-snippet.md)
+into `~/.claude/CLAUDE.md`. After the install, that file sits at
+`~/.claude/plugins/marketplaces/wz369-writing/claude-md-snippet.md`.
+
+While you are in `CLAUDE.md`, delete any line that caps output length, such as
+"be concise" or "keep summaries under 5 lines". Compression is what produces the
+stacked nouns and the dropped subjects that the style exists to remove, so a
+length cap fights the style directly.
+
+**Step 4. Confirm the style is actually firing.** See
+[Check that it is actually running](#check-that-it-is-actually-running).
 
 For claude.ai and Claude Science, see [Other surfaces](#other-surfaces) below.
 Plugins are a Claude Code feature and do not reach those.
@@ -211,13 +240,34 @@ pass.
 
 ## Check that it is actually running
 
-Start a new session and ask Claude what its output style is. Or check the
-plugin is loaded:
+Two checks. The first says the plugin is loaded. The second says the style is
+changing what Claude writes, which is the check that matters.
+
+**Check 1, is the plugin loaded.**
 
 ```bash
 claude plugin list
 claude plugin details plain-precise
 ```
+
+**Check 2, is the style firing.** Run this after `/clear` or in a new session:
+
+```bash
+claude -p "In two sentences, say what a comparator method that is agnostic to a nuisance parameter risks."
+```
+
+The prompt contains three trap words on purpose. Read the reply:
+
+- The style is live if the reply writes "comparison method" instead of
+  `comparator`, writes "does not assume" instead of `agnostic`, glosses
+  `nuisance parameter` inline, and labels the claim `[inferred]` or
+  `[training]`. It keeps `nuisance parameter` itself, because that is a real
+  statistical term and the style protects terms of art.
+- The style is not live if the reply keeps `comparator` and `agnostic` unchanged
+  and uses em dashes.
+
+Both arms of this probe were run during development, so the two outputs are easy
+to tell apart. See [`verify/RESULTS.md`](verify/RESULTS.md).
 
 The style is part of the system prompt, and Claude Code reads the system prompt
 once at session start, so a change takes effect only after `/clear` or a new

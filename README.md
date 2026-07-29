@@ -10,15 +10,10 @@ precise phrasing and spends an extra sentence explaining it.
 
 ## What it changes
 
-Both examples are verbatim. Each one shows two answers to the same question,
-from the same model, one written with the rule and one without. No wording was
-changed and nothing was invented for this page. Where `[...]` appears, text was
-left out to keep the example short.
+Verbatim. Same question, same model, one answer written with the rule and one
+without.
 
-### Example 1, the words
-
-The question asked why a comparison method that ignores a nuisance parameter can
-still give a wrong answer.
+### Word choice
 
 Without the rule:
 
@@ -30,29 +25,23 @@ With the rule:
 > A comparison method that does not assume a value for the nuisance parameter
 > still assumes a structure for it.
 
-Three things changed. `Agnosticism` became "does not assume", which says the
-same thing in words that are taught rather than absorbed. The word `bought` was
-a metaphor about buying, so it went. And `the nuisance` was written out as
-`nuisance parameter`, because the clipped form hides the fact that this is a
-statistical term rather than an ordinary English word.
+Without the rule:
 
-What did not change is the claim itself. Both sentences say that the
-independence holds only under an assumption about the form of the model.
+> Two things to pin down before you trust the 3.33
 
-### Example 2, the structure
+With the rule:
 
-The question asked what an effective sample size of 30 percent does to a
-calculation of how many particles to simulate.
+> Two assumptions that the factor of 3.3 depends on
+
+### Structure
 
 Without the rule:
 
 > **Headline: divide any nominal-N sample size by 0.3. You need about 3.33 times
 > as many particles as the naive calculation says.**
 >
-> [...] Any convergence check of the form "standard error below tolerance at N
+> Any convergence check of the form "standard error below tolerance at N
 > particles" fires 3.33 times too early.
->
-> **Two things to pin down before you trust the 3.33**
 
 With the rule:
 
@@ -61,26 +50,11 @@ With the rule:
 > particles, so you need about 33,000 nominal particles to reach the precision
 > that the calculation asked for.
 >
-> [...] Reported standard errors are too small by a factor of 1.83. A reported
-> value of 0.010 should be 0.018.
->
-> [a heading] Two assumptions that the factor of 3.3 depends on
+> Reported standard errors are too small by a factor of 1.83. A reported value
+> of 0.010 should be 0.018.
 
-Four things changed.
-
-1. **The answer arrives as an ordinary sentence.** The version without the rule
-   announces that an answer is coming, in bold, before giving it.
-2. **The inline bold is gone.** Two of the three fragments shown above are bold
-   in the version without the rule. The style keeps bold for headings and for
-   numbers with units.
-3. **"Pin down" became "depends on".** One plain verb was available, so the
-   figurative phrasal verb was not needed.
-4. **Every number carries what it is compared against.** A count of 10,000
-   nominal particles is given against 3,000 independent ones, and a reported
-   standard error of 0.010 against a true 0.018.
-
-There is also no metaphor left. In the version without the rule a convergence
-check "fires 3.33 times too early", and a check does not fire.
+The two quoted lines in each block are not next to each other in the original
+answers.
 
 ## Install
 
@@ -142,9 +116,10 @@ bash install-claude-md.sh --uninstall  # take the block out again
 **Step 4. Confirm the style is actually firing.** See
 [Check that it is actually running](#check-that-it-is-actually-running).
 
-For Codex, see [Install for Codex](#install-for-codex). For claude.ai and Claude
-Science, see [Other surfaces](#other-surfaces). Plugins are a Claude Code
-feature and do not reach either of those.
+For Codex, see [Install for Codex](#install-for-codex). For claude.ai, Claude
+Science and Cowork, see
+[Install for claude.ai and Cowork](#install-for-claudeai-and-cowork). Plugins
+are a Claude Code feature and do not reach those.
 
 ## Why this is an output style and not a skill
 
@@ -198,7 +173,10 @@ agent-plain-precise-language/
 │   ├── AGENTS.md                 the same rules, built for Codex. Generated.
 │   └── build.py                  builds codex/AGENTS.md from the two sources
 ├── claude-ai/
-│   └── preferences.md            paste-in text for claude.ai and Claude Science
+│   ├── preferences.md            paste-in text for claude.ai and Claude Science
+│   ├── build.py                  builds the skill from preferences.md
+│   └── plain-precise/
+│       └── SKILL.md              the Cowork skill. Generated.
 ├── claude-md-snippet.md          the integrity rules, the source for step 3
 ├── install-claude-md.sh          step 3, and its uninstall
 ├── install-codex.sh              the Codex install, and its uninstall
@@ -221,16 +199,18 @@ rebuild the Codex file, bump `version` in
 `plugins/plain-precise/.claude-plugin/plugin.json`, then commit and push.
 
 ```bash
-python3 codex/build.py          # rebuild codex/AGENTS.md from the two sources
-python3 codex/build.py --check  # exits 1 if it is out of date
+python3 codex/build.py              # rebuild codex/AGENTS.md
+python3 claude-ai/build.py          # rebuild the Cowork skill
+python3 codex/build.py --check      # both --check flags exit 1 when stale
+python3 claude-ai/build.py --check
 git add -A
 git commit -m "what changed"
 git push
 ```
 
-The rebuild step matters, because `codex/AGENTS.md` is generated. If you edit
-the style file and skip it, Claude Code users get the change and Codex users do
-not.
+The rebuild steps matter, because two files are generated. If you edit the style
+file and skip `codex/build.py`, Claude Code users get the change and Codex users
+do not. The same holds for `claude-ai/build.py` and Cowork.
 
 Users only receive an update when the `version` field changes, so bump it on
 every release. On their side, `claude plugin marketplace update` refreshes the
@@ -318,8 +298,8 @@ settings file directly.
 
 - The **Cowork** tab takes its skills, plugins and connectors from the Customize
   configuration, which syncs through your claude.ai account rather than from
-  `~/.claude`. For that tab, and for the Chat tab, use the paste-in text in
-  [Other surfaces](#other-surfaces).
+  `~/.claude`. For that tab, and for the Chat tab, see
+  [Install for claude.ai and Cowork](#install-for-claudeai-and-cowork).
 - **Cloud sessions** do not get plugins that you installed on the desktop. To
   use it there, declare it under `enabledPlugins` in the repository's
   `.claude/settings.json`, and it installs when the session starts.
@@ -417,6 +397,59 @@ solved is the default rather than an occasional request. So `AGENTS.md` is the
 only always-on route in Codex today. [training, checked against published
 descriptions of the Codex plugin manifest rather than against the source]
 
+## Install for claude.ai and Cowork
+
+The plugin cannot reach these, so they use a different mechanism. A plugin is a
+Claude Code feature and reads `~/.claude` on your machine, while claude.ai and
+the Cowork tab take their configuration from your claude.ai account.
+
+### claude.ai chat
+
+One step, and it is always on afterwards.
+
+Open Settings, then Profile, then the field named "Instructions for Claude".
+Paste in the text between the two "Copy" markers in
+[`claude-ai/preferences.md`](claude-ai/preferences.md).
+
+Anthropic's documentation says of that field that "any instructions you add here
+will be applied to all of your conversations with Claude", so nothing is needed
+per chat. The text is a condensed version of the style. It drops the parts that
+only make sense in Claude Code, such as `file:line` citations and subagent
+hand-offs, and keeps everything about words and sentences.
+
+This also covers Claude Science, because it uses the same account settings.
+
+### Cowork
+
+Install it as a skill.
+
+1. Open **Customize** in the desktop app sidebar, or the skills settings on
+   claude.ai.
+2. Add the skill in [`claude-ai/plain-precise/`](claude-ai/plain-precise/).
+   Upload the folder, or the folder zipped, whichever the interface asks for.
+   The folder holds one file, `SKILL.md`, which is generated from the same
+   `preferences.md` used above, so the two never drift apart.
+3. Enable it for your account.
+
+Cowork sessions "load the skills enabled for your claude.ai account, synced at
+session start", which is why this route works where the plugin does not.
+
+**A skill is weaker than the plugin, and you should know how.** A plugin output
+style applies to every turn. A skill loads when Claude judges it relevant, or
+when you invoke it by name. The skill's description tells Claude to load it
+before writing any prose, which is the strongest pull a skill description can
+have, but it is still a judgment rather than a guarantee. [inferred, not tested
+in Cowork] If a Cowork reply comes back in the old style, ask for the skill by
+name and it will load.
+
+**One question worth settling in 30 seconds.** I do not know whether the profile
+instructions field also reaches Cowork. The documentation states that skills come
+from the account, and says nothing either way about the instructions field. Paste
+the preferences text in first, then ask a Cowork session the probe question from
+[Check that it is actually running](#check-that-it-is-actually-running). If the
+reply writes "comparison method" and "does not assume", the field carries and
+you do not need the skill at all.
+
 ## Turn it off
 
 Every part comes out, and nothing needs a reinstall to come back.
@@ -465,25 +498,18 @@ style file and the `outputStyle` key from `settings.json`.
 name, such as `CLAUDE.md.bak-20260729-144045`. So a rollback is always possible
 even if a script does something you did not want.
 
-**claude.ai.** Delete the pasted text from Settings, then Profile, then
-"Instructions for Claude". There is no command for that one.
+**claude.ai and Cowork.** Delete the pasted text from Settings, then Profile,
+then "Instructions for Claude". For Cowork, also disable or remove the
+`plain-precise` skill under **Customize**. Neither has a command.
 
 ## Other surfaces
 
-**claude.ai and Claude Science.** Paste
-[`claude-ai/preferences.md`](claude-ai/preferences.md) into
-Settings, then Profile, then the field named "Instructions for Claude". That
-field applies to all of your conversations, so it needs no per-chat action. It
-is a condensed version of the style: it drops the parts that only make sense in
-Claude Code, such as `file:line` citations and subagent hand-offs, and keeps
-everything about words and sentences.
-
 **Other Claude Code surfaces.** The plugin covers the CLI, the desktop app and
-the IDE extensions, because those read the same `~/.claude` configuration. It
-does not cover the Cowork tab or cloud sessions, which take their configuration
-from your claude.ai account instead. See
-[Install in the Claude desktop app](#install-in-the-claude-desktop-app) for what
-to do about those two.
+the IDE extensions, because those read the same `~/.claude` configuration.
+
+**Cloud sessions.** These do not load plugins enabled only in your user
+settings. Declare the plugin under `enabledPlugins` in the repository's
+`.claude/settings.json` and it installs when the session starts.
 
 ## Adapting it for a different person
 

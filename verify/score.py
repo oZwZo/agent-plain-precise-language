@@ -76,10 +76,20 @@ def prose_lines(text):
             yield s
 
 
+SOURCE_LABEL = re.compile(r"\s*\[(?:verified|training|inferred)\]")
+
+
 def sentences(text):
     out = []
     for line in prose_lines(text):
         line = re.sub(r"\*\*([^*]+)\*\*", r"\1", line)
+        # Remove the [verified] / [training] / [inferred] labels before
+        # splitting. They sit after the full stop, and the splitter needs a
+        # capital letter or a digit after the stop, so a label left in place
+        # hides the sentence boundary. Measured effect on one real Codex reply:
+        # mean sentence length read 56.75 words with the labels left in and
+        # 14.13 words with them removed, on the same text.
+        line = SOURCE_LABEL.sub("", line)
         for s in re.split(r"(?<=[.!?])\s+(?=[A-Z0-9])", line):
             if len(s.split()) >= 4:
                 out.append(s.strip())

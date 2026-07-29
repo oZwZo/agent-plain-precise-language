@@ -1,7 +1,19 @@
 # CLAUDE.md snippet
 
-Append this to `~/.claude/CLAUDE.md` on a new machine. A plugin cannot ship a
-`CLAUDE.md`, so this part is copied by hand.
+This goes in `~/.claude/CLAUDE.md`. A plugin cannot ship a `CLAUDE.md`, so this
+part does not travel with the plugin.
+
+You do not need to copy it by hand. `install-claude-md.sh` reads the fenced
+block below and writes it into `~/.claude/CLAUDE.md` between two markers, so
+your own text is kept and a second run replaces the block rather than adding a
+copy:
+
+```bash
+bash ~/.claude/plugins/marketplaces/wz369-writing/install-claude-md.sh
+```
+
+`bash install-claude-md.sh --uninstall` takes it out again. The rest of this
+file explains why these rules live here rather than in the output style.
 
 ## Why these two files are split, and what each one does
 

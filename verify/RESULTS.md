@@ -204,6 +204,55 @@ intended edits, everything else untouched." A grader flagged it as a fabricated 
 transformation's own fidelity, and noted it reads like an attempt to get a reviewer to accept the
 output without checking. Worth knowing that a rewriting step can insert self-certifying text.
 
+## Trial 7: does it work in Codex?
+
+Yes. Tested on Codex CLI 0.136.0, model `gpt-5.5`, reasoning effort low.
+
+**First, that a global instruction file is read at all.** I built an isolated `CODEX_HOME`
+containing one `AGENTS.md` whose only instruction was to begin every reply with the token
+`ZQ7-MARKER`, then ran `codex exec` from a working directory that held no `AGENTS.md`. The reply
+opened with `ZQ7-MARKER`, so `$CODEX_HOME/AGENTS.md` is what produced it and the working directory
+is not a confound.
+
+**Then the trap-word probe.** One call per arm, same prompt, using three words the style is meant
+to replace and one it is meant to keep.
+
+| metric | without the rules | with the rules |
+|---|---|---|
+| gates passed | 13 of 16 | 16 of 16 |
+| fancy English per 1,000 words | 55.56 | 0.00 |
+| mean sentence length in words | 18.33 | 14.13 |
+| longest sentence in words | 32 | 24 |
+| sentences over 25 words | 8.33% | 0.00% |
+
+The arm without the rules used `comparator` twice, `agnostic` twice, `nuisance` four times and
+`provenance` three times. The arm with the rules wrote "comparison method", "does not assume" and
+"origin", kept `nuisance parameter`, and glossed it inline.
+
+One call per arm, so this is a single observation and not a rate.
+
+**Context cost, measured rather than estimated.** Same trivial prompt in both arms, token counts
+read from `codex exec --json`: 28,097 input tokens without the rules and 32,960 with them. So the
+file costs about 4,900 input tokens per session. One measurement per arm.
+
+**One difference from Claude Code, recorded because it is not an improvement.** The Codex reply
+carried 15 source labels across 15 sentences, almost all `[inferred]`. That is heavier labelling
+than the same rules produce in Claude Code. My reading is that the integrity rules sit at the same
+level as everything else in the single Codex file, whereas in Claude Code they sit in `CLAUDE.md`,
+one level below the output style. [inferred, from one observation, not tested]
+
+### A scorer bug this trial exposed
+
+The sentence splitter needs a capital letter or a digit after the full stop. A trailing
+`[inferred]` starts with a bracket, so the splitter could not see the boundary and merged whole
+paragraphs into one sentence. On the same Codex reply it reported a mean sentence length of 56.75
+words with the labels left in and 14.13 words with them removed. The fix strips
+`[verified]`, `[training]` and `[inferred]` before splitting. This is the sixth measurement error
+in this project that came from my own scorer rather than from the model.
+
+After the fix the baseline still reproduces: mean sentence length 16.17 words, against 16.2 in the
+original measurement.
+
 ## Not done
 
 - 30 of the 42 eligible pre-session answers were not used in the fidelity trial. That is a cost

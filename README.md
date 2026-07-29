@@ -33,23 +33,39 @@ system prompt and Claude Code reads that once at session start. You do not edit
 `settings.json`, because the style sets `force-for-plugin: true`, which applies
 it automatically whenever the plugin is enabled.
 
-**Step 3. Add the research-integrity rules by hand.**
+**Step 3. Add the research-integrity rules.**
 
-A plugin cannot ship a `CLAUDE.md`, so this part does not travel with the
-plugin. Copy the fenced block from [`claude-md-snippet.md`](claude-md-snippet.md)
-into `~/.claude/CLAUDE.md`. After the install, that file sits at
-`~/.claude/plugins/marketplaces/wz369-writing/claude-md-snippet.md`.
+A plugin cannot ship a `CLAUDE.md`, so this part does not travel with the plugin
+and needs its own command. Step 2 already put the whole repository on your disk,
+so run the script from there. No clone is needed.
 
-While you are in `CLAUDE.md`, delete any line that caps output length, such as
-"be concise" or "keep summaries under 5 lines". Compression is what produces the
-stacked nouns and the dropped subjects that the style exists to remove, so a
-length cap fights the style directly.
+```bash
+bash ~/.claude/plugins/marketplaces/wz369-writing/install-claude-md.sh
+```
+
+The script adds the rules to `~/.claude/CLAUDE.md` between two marker comments,
+backs the file up first, and keeps everything you wrote yourself. Running it
+twice replaces the block rather than adding a second copy. It also lists any
+line that caps output length, such as "be concise" or "keep summaries under 5
+lines", and tells you to delete it. Compression is what produces the stacked
+nouns and the dropped subjects that the style exists to remove, so a length cap
+fights the style directly. The script reports those lines and does not delete
+them, because they are yours.
+
+Other things the script accepts:
+
+```bash
+bash install-claude-md.sh --dry-run    # say what would change, write nothing
+bash install-claude-md.sh --print      # print the block, so you can paste it yourself
+bash install-claude-md.sh --uninstall  # take the block out again
+```
 
 **Step 4. Confirm the style is actually firing.** See
 [Check that it is actually running](#check-that-it-is-actually-running).
 
-For claude.ai and Claude Science, see [Other surfaces](#other-surfaces) below.
-Plugins are a Claude Code feature and do not reach those.
+For Codex, see [Install for Codex](#install-for-codex). For claude.ai and Claude
+Science, see [Other surfaces](#other-surfaces). Plugins are a Claude Code
+feature and do not reach either of those.
 
 ## Why this is an output style and not a skill
 
@@ -99,9 +115,14 @@ agent-plain-precise-language/
 │       │   └── plugin.json       the plugin manifest
 │       └── output-styles/
 │           └── plain-precise.md  THE RULE. This is the only file that matters.
+├── codex/
+│   ├── AGENTS.md                 the same rules, built for Codex. Generated.
+│   └── build.py                  builds codex/AGENTS.md from the two sources
 ├── claude-ai/
 │   └── preferences.md            paste-in text for claude.ai and Claude Science
-├── claude-md-snippet.md          the integrity rules, copied by hand
+├── claude-md-snippet.md          the integrity rules, the source for step 3
+├── install-claude-md.sh          step 3, and its uninstall
+├── install-codex.sh              the Codex install, and its uninstall
 ├── install.sh                    fallback for machines with no access to the git host
 ├── uninstall.sh
 └── verify/                       the scorer and the measured results
@@ -117,14 +138,20 @@ copy that one file into `~/.claude/output-styles/` and set
 ## Publish a change so other machines pick it up
 
 The marketplace is this git repository. To release a change, edit the files,
-bump `version` in `plugins/plain-precise/.claude-plugin/plugin.json`, then
-commit and push.
+rebuild the Codex file, bump `version` in
+`plugins/plain-precise/.claude-plugin/plugin.json`, then commit and push.
 
 ```bash
+python3 codex/build.py          # rebuild codex/AGENTS.md from the two sources
+python3 codex/build.py --check  # exits 1 if it is out of date
 git add -A
 git commit -m "what changed"
 git push
 ```
+
+The rebuild step matters, because `codex/AGENTS.md` is generated. If you edit
+the style file and skip it, Claude Code users get the change and Codex users do
+not.
 
 Users only receive an update when the `version` field changes, so bump it on
 every release. On their side, `claude plugin marketplace update` refreshes the
@@ -161,6 +188,139 @@ The script backs up `settings.json` before it writes, and it changes only the
 `--link` is the better choice on a machine where you keep a clone of this
 repository, because then `git pull` updates the live style with no second step
 and there is no drifting copy.
+
+## Install for Codex
+
+It works in Codex. I tested it on Codex CLI 0.136.0 rather than assuming it,
+and the numbers are below.
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/oZwZo/agent-plain-precise-language/main/install-codex.sh -o install-codex.sh
+bash install-codex.sh
+```
+
+Read the script before you run it. It is one file and it does two things: it
+writes the rules into `$CODEX_HOME/AGENTS.md`, where `CODEX_HOME` defaults to
+`~/.codex`, and it backs that file up first. If you have a clone of this
+repository, skip the download and run `bash install-codex.sh` from inside it.
+
+Then start a new Codex session, because Codex reads the instruction file at
+session start.
+
+The same options work as for the Claude script: `--dry-run`, `--print` and
+`--uninstall`.
+
+### What is different in Codex, and why
+
+Codex has one instruction file and no output-style mechanism, so the writing
+rules and the research-integrity rules go into that one file together. In Claude
+Code they are split, because there the two levels behave differently. The
+combined file is built from the same two sources by `codex/build.py`, so there
+is one place to edit and no second copy to keep in step.
+
+| | Claude Code | Codex |
+|---|---|---|
+| where the rules live | output style, in the system prompt | `AGENTS.md`, at instruction level |
+| how they arrive | `claude plugin install` | a script that writes one file |
+| are the two rule sets split | yes, style and `CLAUDE.md` | no, one file holds both |
+| does it reach subagents | no | yes, because `AGENTS.md` is inherited |
+| turning it off | `claude plugin disable` | `bash install-codex.sh --uninstall` |
+
+### What I measured in Codex
+
+First, that the global file is read at all. I built an isolated `CODEX_HOME`
+holding one `AGENTS.md` with a single marker instruction in it, then ran
+`codex exec` from a working directory that contained no `AGENTS.md`. The marker
+appeared in the reply, so the file at `$CODEX_HOME/AGENTS.md` is what produced
+it.
+
+Then the same trap-word probe used for Claude Code, one call per arm, on
+`gpt-5.5` at low reasoning effort:
+
+| metric | Codex without the rules | Codex with the rules |
+|---|---|---|
+| gates passed | 13 of 16 | 16 of 16 |
+| fancy English per 1,000 words | 55.56 | 0.00 |
+| mean sentence length in words | 18.33 | 14.13 |
+| longest sentence in words | 32 | 24 |
+| sentences over 25 words | 8.33% | 0.00% |
+
+The arm without the rules kept `comparator` twice, `agnostic` twice, `nuisance`
+four times and `provenance` three times. The arm with the rules wrote
+"comparison method", "does not assume" and "origin", kept `nuisance parameter`
+because it is a real statistical term, and glossed it inline as "an unwanted
+source of variation".
+
+This is one call per arm, so it is a single observation and not a rate.
+
+**One honest difference from Claude Code.** The Codex reply labelled every
+sentence, 15 labels in 15 sentences, almost all of them `[inferred]`. That is
+more labelling than the same rules produce in Claude Code. My reading is that
+the integrity rules sit at the same level as everything else in the Codex file,
+whereas in Claude Code they sit in `CLAUDE.md`, one level below the style.
+[inferred, from one observation, not tested] If it bothers you, delete the
+`# Research integrity rules` section from your `~/.codex/AGENTS.md` after
+installing, or run `bash install-codex.sh --uninstall` and paste in only the
+part you want.
+
+**What it costs.** The rules add about 4,900 input tokens to every Codex
+session. Measured with `codex exec --json` on the same trivial prompt in both
+arms: 28,097 input tokens without the rules against 32,960 with them. One
+measurement per arm.
+
+**A Codex plugin would not work for this.** Codex plugins bundle skills, MCP
+servers and app connections. A skill loads when it is invoked, which is the same
+reason a skill is the wrong shape in Claude Code, because the problem being
+solved is the default rather than an occasional request. So `AGENTS.md` is the
+only always-on route in Codex today. [training, checked against published
+descriptions of the Codex plugin manifest rather than against the source]
+
+## Turn it off
+
+Every part comes out, and nothing needs a reinstall to come back.
+
+**Claude Code, keep it installed but stop it applying.**
+
+```bash
+claude plugin disable plain-precise@wz369-writing
+```
+
+Then run `/clear` or start a new session. Turn it back on with
+`claude plugin enable plain-precise@wz369-writing`. This is the one to use if
+you are unsure, because it changes nothing on disk.
+
+**Claude Code, remove it completely.**
+
+```bash
+claude plugin uninstall plain-precise@wz369-writing
+claude plugin marketplace remove wz369-writing
+bash ~/.claude/plugins/marketplaces/wz369-writing/install-claude-md.sh --uninstall
+```
+
+Run the third command before the first two, or keep a copy of the script,
+because uninstalling the marketplace deletes the cached repository that holds
+it. If it is already gone, download the script again with the `curl` line from
+[Install for Codex](#install-for-codex), changing the file name to
+`install-claude-md.sh`.
+
+**Codex.**
+
+```bash
+bash install-codex.sh --uninstall
+```
+
+This takes out only the text between the markers, so anything you wrote in
+`~/.codex/AGENTS.md` yourself stays. Start a new Codex session afterwards.
+
+**If you used the no-plugin route**, run `./uninstall.sh`, which removes the
+style file and the `outputStyle` key from `settings.json`.
+
+**Every script backs the file up before it writes**, with a timestamp in the
+name, such as `CLAUDE.md.bak-20260729-144045`. So a rollback is always possible
+even if a script does something you did not want.
+
+**claude.ai.** Delete the pasted text from Settings, then Profile, then
+"Instructions for Claude". There is no command for that one.
 
 ## Other surfaces
 

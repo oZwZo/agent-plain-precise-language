@@ -1,17 +1,96 @@
 # plain-precise
 
-An always-on writing rule for Claude Code. It makes Claude write plain English
-for a non-native English speaker whose general English is around CEFR B2, while
-keeping every technical term exact.
+An always-on writing rule for Claude Code and Codex. It makes the model write
+plain English for a non-native English speaker whose general English is around
+CEFR B2, while keeping every technical term exact.
 
 The governing rule inside it is one sentence: **never trade precision for
 readability.** If plain phrasing would make a claim vaguer, the style keeps the
 precise phrasing and spends an extra sentence explaining it.
 
+## What it changes
+
+Both examples are verbatim. Each one shows two answers to the same question,
+from the same model, one written with the rule and one without. No wording was
+changed and nothing was invented for this page. Where `[...]` appears, text was
+left out to keep the example short.
+
+### Example 1, the words
+
+The question asked why a comparison method that ignores a nuisance parameter can
+still give a wrong answer.
+
+Without the rule:
+
+> Agnosticism is bought with an assumption about how the nuisance enters, such
+> as additively, or with exchangeable observations.
+
+With the rule:
+
+> A comparison method that does not assume a value for the nuisance parameter
+> still assumes a structure for it.
+
+Three things changed. `Agnosticism` became "does not assume", which says the
+same thing in words that are taught rather than absorbed. The word `bought` was
+a metaphor about buying, so it went. And `the nuisance` was written out as
+`nuisance parameter`, because the clipped form hides the fact that this is a
+statistical term rather than an ordinary English word.
+
+What did not change is the claim itself. Both sentences say that the
+independence holds only under an assumption about the form of the model.
+
+### Example 2, the structure
+
+The question asked what an effective sample size of 30 percent does to a
+calculation of how many particles to simulate.
+
+Without the rule:
+
+> **Headline: divide any nominal-N sample size by 0.3. You need about 3.33 times
+> as many particles as the naive calculation says.**
+>
+> [...] Any convergence check of the form "standard error below tolerance at N
+> particles" fires 3.33 times too early.
+>
+> **Two things to pin down before you trust the 3.33**
+
+With the rule:
+
+> Multiply every particle count that came out of the calculation by about 3.3. A
+> nominal count of 10,000 particles carries the precision of 3,000 independent
+> particles, so you need about 33,000 nominal particles to reach the precision
+> that the calculation asked for.
+>
+> [...] Reported standard errors are too small by a factor of 1.83. A reported
+> value of 0.010 should be 0.018.
+>
+> [a heading] Two assumptions that the factor of 3.3 depends on
+
+Four things changed.
+
+1. **The answer arrives as an ordinary sentence.** The version without the rule
+   announces that an answer is coming, in bold, before giving it.
+2. **The inline bold is gone.** Two of the three fragments shown above are bold
+   in the version without the rule. The style keeps bold for headings and for
+   numbers with units.
+3. **"Pin down" became "depends on".** One plain verb was available, so the
+   figurative phrasal verb was not needed.
+4. **Every number carries what it is compared against.** A count of 10,000
+   nominal particles is given against 3,000 independent ones, and a reported
+   standard error of 0.010 against a true 0.018.
+
+There is also no metaphor left. In the version without the rule a convergence
+check "fires 3.33 times too early", and a check does not fire.
+
 ## Install
 
 Four steps. Do all four, because the first two on their own leave the rule
 half-installed.
+
+These are terminal commands. If you use the desktop app, they still apply, and
+[Install in the Claude desktop app](#install-in-the-claude-desktop-app) says
+where to type them and what to do instead if you would rather not use a
+terminal. For Codex, see [Install for Codex](#install-for-codex).
 
 **Step 1. Register the catalogue.**
 
@@ -189,6 +268,69 @@ The script backs up `settings.json` before it writes, and it changes only the
 repository, because then `git pull` updates the live style with no second step
 and there is no drifting copy.
 
+## Install in the Claude desktop app
+
+The desktop app and the CLI read the same configuration files, so there is
+nothing separate to install. `~/.claude/settings.json` and your `CLAUDE.md` are
+shared between them, and the desktop app runs the same engine underneath.
+
+**The easy route is the built-in terminal.** Open it from the Views menu, or
+press <kbd>Ctrl</kbd> and <kbd>`</kbd> on macOS and on Windows. It opens in your
+session's working directory. Run the same four steps from
+[Install](#install) there, then start a new session. The terminal is available
+in local sessions only.
+
+**If you would rather not use a terminal**, do the same thing by editing two
+files.
+
+1. Open `~/.claude/settings.json`, which is `%USERPROFILE%\.claude\settings.json`
+   on Windows, and add these two keys. Keep whatever is already in the file, and
+   merge rather than replace if either key is already present.
+
+   ```json
+   {
+     "extraKnownMarketplaces": {
+       "wz369-writing": {
+         "source": { "source": "github", "repo": "oZwZo/agent-plain-precise-language" }
+       }
+     },
+     "enabledPlugins": {
+       "plain-precise@wz369-writing": true
+     }
+   }
+   ```
+
+2. Open `~/.claude/CLAUDE.md` and paste in the fenced block from
+   [`claude-md-snippet.md`](claude-md-snippet.md).
+
+3. Start a new session.
+
+The plugin browser in the desktop app, reached from the **+** button next to the
+prompt box, then **Plugins**, is worth knowing about for a different reason. It
+lists what you have installed and lets you enable, disable or uninstall through
+**Manage plugins**, so it is a way to turn this rule off without a terminal. The
+documentation describes the browser as showing plugins from marketplaces you
+have already configured, and does not say whether a new marketplace can be added
+from it. I do not know whether it can. That is why step 1 above edits the
+settings file directly.
+
+**Two places the plugin does not reach.**
+
+- The **Cowork** tab takes its skills, plugins and connectors from the Customize
+  configuration, which syncs through your claude.ai account rather than from
+  `~/.claude`. For that tab, and for the Chat tab, use the paste-in text in
+  [Other surfaces](#other-surfaces).
+- **Cloud sessions** do not get plugins that you installed on the desktop. To
+  use it there, declare it under `enabledPlugins` in the repository's
+  `.claude/settings.json`, and it installs when the session starts.
+
+**One thing I could not verify.** This plugin works by shipping an output style,
+and the desktop documentation never mentions output styles. Configuration is
+shared and the engine is the same, so I expect it to apply. [inferred, not
+tested on a desktop install] Settle it in about ten seconds by running the probe
+in [Check that it is actually running](#check-that-it-is-actually-running) inside
+a desktop session, as an ordinary message rather than as a shell command.
+
 ## Install for Codex
 
 It works in Codex. I tested it on Codex CLI 0.136.0 rather than assuming it,
@@ -289,6 +431,10 @@ Then run `/clear` or start a new session. Turn it back on with
 `claude plugin enable plain-precise@wz369-writing`. This is the one to use if
 you are unsure, because it changes nothing on disk.
 
+In the desktop app you can do the same without a terminal. Click the **+**
+button next to the prompt box, choose **Plugins**, then **Manage plugins**, and
+disable it there.
+
 **Claude Code, remove it completely.**
 
 ```bash
@@ -332,9 +478,12 @@ is a condensed version of the style: it drops the parts that only make sense in
 Claude Code, such as `file:line` citations and subagent hand-offs, and keeps
 everything about words and sentences.
 
-**Other Claude Code surfaces.** The plugin covers the CLI, the desktop app, the
-web app and the IDE extensions, because all of them read the same
-`~/.claude` configuration.
+**Other Claude Code surfaces.** The plugin covers the CLI, the desktop app and
+the IDE extensions, because those read the same `~/.claude` configuration. It
+does not cover the Cowork tab or cloud sessions, which take their configuration
+from your claude.ai account instead. See
+[Install in the Claude desktop app](#install-in-the-claude-desktop-app) for what
+to do about those two.
 
 ## Adapting it for a different person
 

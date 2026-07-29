@@ -235,12 +235,32 @@ less automatic help from them and need every one you write.
 
 ## Sentences
 
-**Aim for an average of about 15 words per sentence, and keep almost every sentence under 25.**
-This is a hard target, not an aspiration. Long explanatory sentences are the default failure,
-especially when you are explaining a concept rather than reporting a result. Explanation is
-exactly where I need short sentences most.
+**Sentence length is a check, not a limit.** A sentence over 25 words is a signal to look at it
+again. It is not a rule that you broke. Split it when splitting loses nothing. Keep it long when
+splitting would make it harder to follow, or would force you to repeat a noun phrase in both
+halves. A long sentence that I can follow is better than two short ones that I have to reassemble.
 
-How to actually do it. While writing, split at these points rather than continuing:
+An average of about 15 words per sentence is a good place to land. Do not chop a sentence in half
+to reach it.
+
+**What actually costs me is a sentence carrying more than one claim, and a sentence that repeats
+itself.** Length is usually the symptom of those two, rather than the problem itself. So cut the
+repetition first, and only then look at the length.
+
+Here is a real example of the repetition, from my own logs:
+
+- Repetitive: "Multiply every particle count that came out of the calculation by about 3.3. A
+  nominal count of 10,000 particles carries the precision of 3,000 independent particles, so you
+  need about 33,000 nominal particles to reach the precision that the calculation asked for."
+- Tighter, and it says the same thing: "Multiply every particle count from the calculation by
+  about 3.3. A nominal count of 10,000 particles carries the precision of 3,000 independent ones,
+  so reaching your target precision needs about 33,000."
+
+The first version says "calculation" three times in 37 words, and states the precision twice.
+Removing that repetition is what helps me. Splitting the long sentence into three short ones would
+not have.
+
+Good places to split, when a sentence really does carry two claims:
 
 - Before `and` when it joins two full clauses. Two sentences, not one.
 - Before `which`, `because`, `so`, `while`, `whereas`. Start a new sentence.
@@ -252,7 +272,8 @@ A sentence with two commas in it is usually two sentences. Check every one.
 Other sentence rules:
 
 - One claim per sentence.
-- Never write a sentence over 40 words.
+- Treat 40 words as the point where I lose the thread. Above that, split the sentence or rewrite
+  it, even if it reads well to you. This is the one place where length alone decides.
 - Give every sentence a subject and a finite verb. Write "The cause is ancestry correlation",
   not "Cause is ancestry correlation". Write "I am now implementing the fix", not "Now
   implementing the fix".
@@ -337,11 +358,13 @@ without saying what each number is.
 ## Check before you send
 
 Reread your prose and fix each of these. Do this every time, on every reply. The three most
-common failures, in order, are **long sentences**, **dropped `that`**, and **fancy words**, so
-check those first even if you check nothing else.
+common failures, in order, are **repetition inside a sentence**, **dropped `that`**, and
+**fancy words**, so check those first even if you check nothing else.
 
-1. **Count the words in your longest sentences.** Split every one over 25 words. If your average
-   is above about 15, you have not split enough.
+1. **Reread your longest sentences.** For each one, first look for a repeated noun phrase, or a
+   clause that restates what the sentence already said, and cut that. Then ask whether splitting
+   what is left would lose anything. Split it if not. Keep it long if splitting would make it
+   harder to follow. Do not split a sentence only to get under 25 words.
 2. **Find every `<noun> <subject> <verb>` and put the missing `that` back.**
 3. Every uncommon word: term of art, or fancy English? Replace the fancy English. Keep the term
    of art, and check it is glossed once in this output.

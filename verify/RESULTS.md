@@ -288,7 +288,39 @@ readability.
 **One correction to my own first reading of this.** I initially wrote that the ban on inline bold
 had removed the only visual mark showing where the answer was. That was wrong, and it came from an
 excerpt I built badly. The rule arm did mark the answer, with a heading reading "The answer", which
-the style permits. The length finding stands; the formatting finding does not.
+the style permits.
+
+### The reader's decision, and what changed because of it
+
+I proposed making the 25-word target win over "do not compress". The reader rejected that:
+
+> I don't think the 25 word target is the compulsory. If the longer sentence is easier to
+> understand, I don't mind.
+
+So the diagnosis was wrong even though the preference was right. The fault in that passage is
+repetition, not length. It says "calculation" three times in 37 words and states the precision
+twice. Cutting only the repetition gives a version that says the same thing in 26 words, on the
+same count that gives 37 for the original and 19 for the version without the rule. Splitting the
+long sentence into short ones would not have helped.
+
+Three things changed as a result.
+
+1. **The style.** The Sentences section now opens with "Sentence length is a check, not a limit",
+   and says to cut repetition before touching length. The 40-word figure is now the only place
+   where length alone decides, because that is where the comprehension evidence is strongest.
+2. **The pre-send checklist.** Item 1 was "Split every one over 25 words". It now says to look for
+   a repeated noun phrase first, and not to split a sentence only to get under 25 words. The list
+   of the three most common failures now opens with repetition inside a sentence rather than with
+   long sentences.
+3. **The scorer.** `pct_over_25w` and both `mean_sentence_len` bounds moved from `GATES` to a new
+   `ADVISORY` list. They are still measured and printed, under a heading reading "advisory, not
+   counted". `longest_sentence <= 40` stays a hard gate. The gate count therefore falls from 16 to
+   13, so pass counts recorded above this line are not directly comparable with ones recorded
+   below it. No underlying measurement changed.
+
+This is the first time the reader has overruled a rule, and it went against the rule I would have
+defended. Recording it here because the alternative is a style that scores well against its own
+instrument and reads worse to the person it was built for.
 
 ## Not done
 

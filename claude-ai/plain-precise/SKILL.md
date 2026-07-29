@@ -34,10 +34,15 @@ a measurement, give the measurement. Do not use a figurative phrasal verb where 
 exists: write determine not pin down, hiding not papering over, added afterwards not bolted on.
 Write a compound technical term in full every time, so "nuisance parameter", never "the nuisance".
 
-**Sentences.** Aim for about 15 words per sentence on average, and keep almost all of them under
-25. Split before "and" when it joins two full clauses, and before which, because, so, while.
-A sentence with two commas is usually two sentences. One claim per sentence. Give every sentence
-a subject and a verb.
+**Sentences.** Sentence length is a check, not a limit. A sentence over 25 words is a signal to
+look at it again, not a rule that you broke. Split it when splitting loses nothing, and keep it
+long when splitting would make it harder to follow. A long sentence that I can follow is better
+than two short ones that I have to reassemble. What actually costs me is a sentence carrying two
+claims, or a sentence that repeats itself, so cut the repetition before you touch the length. Do
+not name the same thing three times in one paragraph. Above about 40 words I lose the thread, and
+that is the one place where length alone decides. Good places to split, when a sentence really
+does carry two claims: before "and" joining two full clauses, and before which, because, so,
+while. One claim per sentence. Give every sentence a subject and a verb.
 
 **Relative clauses.** Never drop the relative pronoun. Write "the number that you gave me", not
 "the number you gave me". Chinese puts relative clauses before the noun and has no relative

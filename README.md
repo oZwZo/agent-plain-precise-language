@@ -64,16 +64,18 @@ With the rule:
 > that the calculation asked for.
 
 The version without the rule is better here, and the reader this style was built
-for said so before any of this was measured. The numbers agree: 19 words against
-37, a mean sentence length of 10.5 words against 21.0, a longest sentence of 13
-words against 29, and no sentence over 25 words against half of them. The style
-asks for about 15 words per sentence and for almost every sentence to stay under
-25, so the passage written under the style fails the style's own target.
+for said so before any of this was measured. It says the same thing in 19 words
+against 37.
 
-Two of the style's own rules pull against each other here. "Length follows from
-clarity, so do not compress" won, and "keep almost every sentence under 25
-words" lost. It is also wordy in a way no rule catches, since it says
-"calculation" three times in 37 words.
+**The style changed because of this example.** The first diagnosis was that the
+passage broke the style's 25-word sentence target, and that the fix was to make
+that target win more often. The reader rejected that reading: a long sentence
+that is easy to follow is fine. So the real fault is repetition, not length. The
+passage says "calculation" three times in 37 words and states the precision
+twice. Sentence length is now written as a check rather than as a limit, and
+40 words is the only point where length alone decides. `verify/score.py` follows
+the same change, so the two sentence-length metrics are still measured and
+printed but no longer decide pass or fail.
 
 Both versions do mark where the answer is. The one without the rule uses a bold
 line, and the one under the rule uses a heading, which the style allows. So this
@@ -385,6 +387,7 @@ Then the same trap-word probe used for Claude Code, one call per arm, on
 | metric | Codex without the rules | Codex with the rules |
 |---|---|---|
 | gates passed | 13 of 16 | 16 of 16 |
+| the same, counted the way the scorer counts today | 10 of 13 | 13 of 13 |
 | fancy English per 1,000 words | 55.56 | 0.00 |
 | mean sentence length in words | 18.33 | 14.13 |
 | longest sentence in words | 32 | 24 |
@@ -581,6 +584,13 @@ calls across 12 prompts and 2 arms with 0 failures:
 | mean sentence length in words | 18.19 | 15.79 | −13% |
 
 No metric got worse.
+
+The last two rows are now advisory rather than requirements. The reader read a
+real example and decided that a long sentence which is easy to follow is fine,
+so the style treats sentence length as a check rather than a limit. The scorer
+still measures and prints both, and no longer counts them towards pass or fail.
+Every number above was measured before that decision and is unchanged by it. See
+[Where the rule loses](#where-the-rule-loses).
 
 **Three rules barely work**, and this is recorded as a negative result rather
 than hidden: reduced relative clauses fell only 11%, stacked verb forms 9%, and

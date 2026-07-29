@@ -345,8 +345,22 @@ GATES = [
     ("gapping_per1k", "<=", 0.0, "contrastive gapping"),
     ("coined_compound_per1k", "<=", 2.0, "single-use coined compound"),
     # noun_stack_per1k is deliberately NOT a gate. See the comment on NOUN_STACK_HYPHEN.
-    ("pct_over_25w", "<=", 5.0, "sentences over 25 words (%)"),
     ("longest_sentence", "<=", 40, "longest sentence (words)"),
+]
+
+# Advisory metrics. Measured and printed, but they do not decide pass or fail.
+#
+# The reader decided this after reading a real example: a long sentence that is
+# easy to follow is fine, and the 25-word figure is a place to look again rather
+# than a limit. The style was changed to match, so the instrument follows. Only
+# the 40-word cliff stays a hard gate, because the style still says that above
+# 40 words length alone decides.
+#
+# Results recorded before this change counted 16 gates. They now count 13, so
+# the two sets of pass counts are not directly comparable. Every underlying
+# number is unchanged.
+ADVISORY = [
+    ("pct_over_25w", "<=", 5.0, "sentences over 25 words (%)"),
     ("mean_sentence_len", "<=", 16.0, "mean sentence length"),
     ("mean_sentence_len", ">=", 8.0, "mean sentence length (lower bound)"),
 ]
@@ -354,10 +368,12 @@ GATES = [
 
 def check_gates(s):
     out = []
-    for key, op, thr, label in GATES:
-        v = s.get(key, 0)
-        ok = (v <= thr) if op == "<=" else (v >= thr)
-        out.append({"metric": label, "value": v, "op": op, "threshold": thr, "pass": ok})
+    for rules, advisory in ((GATES, False), (ADVISORY, True)):
+        for key, op, thr, label in rules:
+            v = s.get(key, 0)
+            ok = (v <= thr) if op == "<=" else (v >= thr)
+            out.append({"metric": label, "value": v, "op": op, "threshold": thr,
+                        "pass": ok, "advisory": advisory})
     return out
 
 
@@ -422,11 +438,19 @@ def print_table(s, gates=None):
     if s["informal_hits"]:
         print("    informal hits:      %s" % s["informal_hits"])
     if gates:
-        failed = [g for g in gates if not g["pass"]]
-        print("\n  GATES: %d/%d pass" % (len(gates) - len(failed), len(gates)))
+        hard = [g for g in gates if not g.get("advisory")]
+        soft = [g for g in gates if g.get("advisory")]
+        failed = [g for g in hard if not g["pass"]]
+        print("\n  GATES: %d/%d pass" % (len(hard) - len(failed), len(hard)))
         for g in failed:
             print("    FAIL  %-42s %s (need %s %s)"
                   % (g["metric"], g["value"], g["op"], g["threshold"]))
+        missed = [g for g in soft if not g["pass"]]
+        if missed:
+            print("  advisory, not counted:")
+            for g in missed:
+                print("    over  %-42s %s (guide %s %s)"
+                      % (g["metric"], g["value"], g["op"], g["threshold"]))
 
 
 def main():
